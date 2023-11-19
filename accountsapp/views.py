@@ -15,10 +15,10 @@ def deactivate_account_page(request):
     return HttpResponse(f"Hello, it`s page for user deactivate")
 
 def register_account_page(request):
-    return HttpResponse(f"Hello, it`s page for user registration")
+    return render(request, 'register.html')
 
 def login_page(request):
-    return HttpResponse(f"Hello, it`s page for user login")
+    return render(request, 'login.html')
 
 def logout_page(request):
     return HttpResponse(f"Hello, it`s page for user logout")

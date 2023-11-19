@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vremby Blog</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a class="active" href="{% url 'mainpage' %}">Main page</a>
+            <a href="{% url 'articlepage' %}">Article details</a>
+            <a href="{% url 'article_create' %}">Create article</a>
+            <a href="{% url 'login_page' %}">Login</a>
+            <a href="{% url 'register_page' %}">Registration</a>
+        </nav>
+    </header>
+<div>
+    {% block content %}
+    {% endblock %}
+</div>
+    <footer>
+        <nav>
+            <a class="active" href="{% url 'about' %}">Description</a>
+        </nav>
+    </footer>
+</body>
+</html>
