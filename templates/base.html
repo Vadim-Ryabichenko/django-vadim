@@ -3,11 +3,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vremby Blog</title>
+    <title>Blog</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link type="image/x-icon" href="{% static 'blog.ico' %}" rel="shortcut icon">
 </head>
 <body>
     <header>
+        <h1>~Vremby Blog~</h1>
         <nav>
             <a class="active" href="{% url 'mainpage' %}">Main page</a>
             <a href="{% url 'articlepage' %}">Article details</a>
@@ -16,7 +18,7 @@
             <a href="{% url 'register_page' %}">Registration</a>
         </nav>
     </header>
-<div>
+<div class = "content">
     {% block content %}
     {% endblock %}
 </div>

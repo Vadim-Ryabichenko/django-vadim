@@ -13,6 +13,8 @@ env/
 
 # Static folder at project root
 /static/
+/static
+static/
 
 # PyCharm-specific files
 .idea/
