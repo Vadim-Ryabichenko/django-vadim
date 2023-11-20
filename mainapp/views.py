@@ -8,8 +8,8 @@ def mainpage(request):
 def about_page(request):
     return render(request, 'about.html')
 
-def articlepage(request):
-    return render(request, 'articlepage.html')
+def articlepage(request, article_id):
+    return HttpResponse(f"Hello, it`s {article_id} article page")
 
 def article_comment(request, article_id):
     return HttpResponse(f"Hello, it`s comment to {article_id} article page")

@@ -5,7 +5,7 @@ from django.urls import path
 urlpatterns = [
     path('', mainpage, name='mainpage'),
     path('about/', about_page, name='about'),
-    path('article/', articlepage, name='articlepage'),
+    path('article/<int:article_id>/', articlepage),
     path('article/<int:article_id>/comment/', article_comment),
     path('create/', article_create, name='article_create'),
     path('article/<int:article_id>/update/', article_update),

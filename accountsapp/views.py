@@ -21,4 +21,4 @@ def login_page(request):
     return render(request, 'login.html')
 
 def logout_page(request):
-    return HttpResponse(f"Hello, it`s page for user logout")
+    return render(request, 'logout.html')
