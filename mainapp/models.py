@@ -17,7 +17,7 @@ class Article(models.Model):
 class Comment(models.Model):
     create_at = models.DateField(auto_now_add=True)
     text = models.TextField(null=True, blank=True)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments", null = True, blank = True)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null = True, blank = True)
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, null = True, blank = True)
 
     def __str__(self):

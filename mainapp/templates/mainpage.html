@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
-<h1>My main page</h1>
+<div class = "ppp">
+    {% for article in articles %}
+    <div class = "rrr">
+        <a href="{% url 'articlepage' pk=article.pk %}"><h1>{{ article.name }}</h1></a> 
+    </div>  
+    {% endfor %}
+</div>
 {% endblock %}
