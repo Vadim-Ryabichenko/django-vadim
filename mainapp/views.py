@@ -19,11 +19,12 @@ def about_page(request):
 
 def articlepage(request, pk):
     article = get_object_or_404(Article, pk=pk)
-    comments = Comment.objects.all()
+    comments = Comment.objects.filter(article=article)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
-            comment = form.save()
+            comment = form.save(commit=False)
+            comment.article = article
             comment.user = request.user if request.user.is_authenticated else None
             comment.save()
             return redirect('articlepage', pk=article.pk)

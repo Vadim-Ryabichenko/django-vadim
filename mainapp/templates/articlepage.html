@@ -1,25 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class = "art_detail">
-    <h3>{{article.create_at}} | {{article.user}} | {% for topic in article.topics.all %}{{topic.name}}{% endfor %}</h3>
-    <h1>~{{ article.name }}~</h1>
-    <p>{{article.text}}</p>
-    <h3>
-    <h2>All comments for this article below</h2>
-    <br>
-    {% for comment in comments %}
-    {% if comment.article.name == article.name %}
-    {{comment.user}}:{{comment.text}}
-    <br>
-    {% endif %}
-    {% endfor %}
-    </h3>
-</div>
-<div class = "comm">
-<form method="post" action="{% url 'articlepage' pk=article.pk %}"></form>
-    {% csrf_token %}
-    {{ form.as_p }}
-<button type="submit">Create comment</button>
-</div>
+    <div class="art_detail">
+        <h3>{{ article.create_at }} | {{ article.user }} |
+            {% for topic in article.topics.all %}{{ topic.name }}{% endfor %}</h3>
+        <h1>~{{ article.name }}~</h1>
+        <p>{{ article.text }}</p>
+        <h3>
+            <h2>All comments for this article below</h2>
+            <br>
+            {% for comment in comments %}
+                {{ comment.user }}:{{ comment.text }}
+                <br>
+            {% endfor %}
+        </h3>
+    </div>
+    <div class="comm">
+        <form method="post" action="{% url 'articlepage' pk=article.pk %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit">Create comment</button>
+        </form>
+    </div>
 {% endblock %}
