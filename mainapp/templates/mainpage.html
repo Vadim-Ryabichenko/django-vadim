@@ -2,6 +2,13 @@
 
 
 {% block content %}
+<div class = "ppp2">
+    {% for topic in topics %}
+    <div class = "rrr2">
+        <a href="{% url 'articlepage' pk=topic.pk %}"><button type="submit"><h1>~{{ topic.name }}~</h1></button></a> 
+    </div>
+    {% endfor %}
+</div>
 <div class = "ppp">
     {% for article in articles %}
     <div class = "rrr">

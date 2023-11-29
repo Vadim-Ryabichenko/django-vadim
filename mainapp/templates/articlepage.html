@@ -16,4 +16,10 @@
     {% endfor %}
     </h3>
 </div>
+<div class = "comm">
+<form method="post" action="{% url 'articlepage' pk=article.pk %}"></form>
+    {% csrf_token %}
+    {{ form.as_p }}
+<button type="submit">Create comment</button>
+</div>
 {% endblock %}
