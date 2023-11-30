@@ -5,7 +5,7 @@
 <div class = "ppp2">
     {% for topic in topics %}
     <div class = "rrr2">
-        <a href="{% url 'articlepage' pk=topic.pk %}"><button type="submit"><h1>~{{ topic.name }}~</h1></button></a> 
+        <a href="{% url 'mainpage' %}"><button><h1>~{{ topic.name }}~</h1></button></a> 
     </div>
     {% endfor %}
 </div>
@@ -15,5 +15,15 @@
         <a href="{% url 'articlepage' pk=article.pk %}"><h1>{{ article.name }}</h1></a> 
     </div>  
     {% endfor %}
+</div>
+<div class = "ppp3">
+{% if form %}
+<form method="" action="{% url 'mainpage' %}">
+    <h1>To find article in articles</h1>
+    {{ form.as_p }}
+    {% csrf_token %}
+<button type="submit">Find article</button>
+</form>
+{% endif %}
 </div>
 {% endblock %}

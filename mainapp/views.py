@@ -3,14 +3,20 @@ from django.http import HttpResponse
 from .models import Article, Comment
 from topicsapp.models import Topic
 from django.shortcuts import redirect
-from .forms import ArticleForm, CommentForm
+from .forms import ArticleForm, CommentForm, FindArticleForm
 from django.contrib.auth.decorators import login_required
 
 
 def mainpage(request):
     topics = Topic.objects.all()
     articles = Article.objects.all()
-    return render(request, 'mainpage.html', {'topics' : topics, 'articles' : articles})
+    form = FindArticleForm(request.GET or None)
+    if form.is_valid():
+        inf = form.cleaned_data.get('name')
+        articles = Article.objects.filter(name__icontains = inf)
+        return render(request, 'mainpage.html', {'articles' : articles})
+    else:
+        return render(request, 'mainpage.html', {'topics' : topics, 'articles' : articles, 'form' : form})
 
 
 def about_page(request):
@@ -19,18 +25,20 @@ def about_page(request):
 
 def articlepage(request, pk):
     article = get_object_or_404(Article, pk=pk)
-    comments = Comment.objects.all()
+    comments = Comment.objects.filter(article=article)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save()
+            comment = form.save(commit=False)
+            comment.article = article
             comment.user = request.user if request.user.is_authenticated else None
             comment.save()
             return redirect('articlepage', pk=article.pk)
     else:
         form = CommentForm()
         return render(request, 'articlepage.html', {'article': article, 'comments': comments, 'form' : form})
-
+    
 
 def article_comment(request, pk):
     return HttpResponse(f"Hello, it`s comment to {pk} article page")
