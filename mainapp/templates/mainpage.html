@@ -5,7 +5,7 @@
 <div class = "ppp2">
     {% for topic in topics %}
     <div class = "rrr2">
-        <a href="{% url 'mainpage' %}"><button><h1>~{{ topic.name }}~</h1></button></a> 
+        <a href="{% url 'art_list' topic.pk %}"><button><h1>~{{ topic.name }}~</h1></button></a> 
     </div>
     {% endfor %}
 </div>
