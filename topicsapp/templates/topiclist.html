@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class = "ppp2">
+    {% for topic in topics %}
+    <div class = "rrr2">
+        <h1>~{{ topic.name }}~</h1> 
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class = "create">
+<h1>I wish you inspiration to update this article title</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update article</button>
+</form>
+</div>
+{% endblock %}

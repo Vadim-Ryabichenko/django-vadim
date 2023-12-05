@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class = "reg">
+    <h1>Welcome {{ new_user.first_name }} {{ new_user.last_name }}!</h1>
+    <p>You successfully Log In. Now you can use this blog or <a href="{% url 'logout_page' %}">log out</a>.</p>
+</div>
+{% endblock %}

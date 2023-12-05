@@ -1,9 +1,8 @@
-from .views import topics_page, topic_subscribe, topic_unsubscribe
+from .views import TopicListView, TopicSubscribeView
 from django.urls import path
 
 
 urlpatterns = [
-    path('', topics_page),
-    path('<int:pk>/subscribe/', topic_subscribe, name = 'art_list'),
-    path('<int:topic_id>/unsubscribe/', topic_unsubscribe),
+    path('', TopicListView.as_view(), name = 'topiclist'),
+    path('<int:pk>/subscribe/', TopicSubscribeView.as_view(), name = 'art_list'),
 ]

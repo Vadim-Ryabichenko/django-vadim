@@ -1,13 +1,11 @@
-from .views import profile_page, set_password_page, set_userdata_page, deactivate_account_page, register_account_page, login_page, logout_page
+from .views import Login, Register, Logout, RegisterDoneView, LoginDoneView
 from django.urls import path
 
 
 urlpatterns = [
-    path('profile/<str:username>/', profile_page),
-    path('set-password/', set_password_page),
-    path('set-userdata/', set_userdata_page),
-    path('deactivate/', deactivate_account_page),
-    path('register/', register_account_page, name = "register_page"),
-    path('login/', login_page, name = "login_page"),
-    path('logout/', logout_page, name = "logout_page"),
+    path('register/', Register.as_view(), name = "register_page"),
+    path('login/', Login.as_view(), name = "login_page"),
+    path('logout/', Logout.as_view(), name = "logout_page"),
+    path('registerdone/', RegisterDoneView.as_view(), name='register_done'),
+    path('logindone/', LoginDoneView.as_view(), name='login_done'),
 ]

@@ -1,48 +1,32 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.contrib.auth import login
-from django.http import HttpResponseRedirect
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
-from .forms import AuthenticationForm
-from .forms import UserRegistrationForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, TemplateView
+from django.urls import reverse_lazy
 
 
-def profile_page(request, username):
-    return HttpResponse(f"Hello, it`s page for user {username} profile")
+class Register(CreateView):
+    form_class = UserCreationForm
+    template_name = 'register.html'
+    success_url = reverse_lazy('register_done')
 
-def set_password_page(request):
-    return HttpResponse(f"Hello, it`s page for user set_password")
 
-def set_userdata_page(request):
-    return HttpResponse(f"Hello, it`s page for user set_userdata")
+class RegisterDoneView(TemplateView):
+    template_name = "register_done.html"
 
-def deactivate_account_page(request):
-    return HttpResponse(f"Hello, it`s page for user deactivate")
 
-def register_account_page(request):
-    if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        if user_form.is_valid():
-            new_user = user_form.save(commit=False)
-            new_user.set_password(user_form.cleaned_data['password'])
-            new_user.save()
-            return render(request, 'register_done.html', {'new_user': new_user})
-    else:
-        user_form = UserRegistrationForm()
-    return render(request, 'register.html', {'user_form': user_form})
+class LoginDoneView(TemplateView):
+    template_name = "login_done.html"
 
-def login_page(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request.POST)
-        if form.is_valid():
-            login(request, form.user)
-            return HttpResponseRedirect('/')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
 
-@login_required(login_url='/accounts/login/')
-def logout_page(request):
-    logout(request)
-    return render(request, 'logout.html')
+class Login(LoginView):
+    success_url = reverse_lazy('login_done')
+    template_name = 'login.html'
+
+    def get_success_url(self):
+        return self.success_url
+
+
+class Logout(LoginRequiredMixin, LogoutView):
+    template_name = 'logout.html'
+    success_url = reverse_lazy('login_page')

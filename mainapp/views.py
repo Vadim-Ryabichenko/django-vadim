@@ -1,67 +1,78 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
 from .models import Article, Comment
+from django.shortcuts import redirect, render, get_object_or_404
 from topicsapp.models import Topic
-from django.shortcuts import redirect
 from .forms import ArticleForm, CommentForm, FindArticleForm
-from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, TemplateView, CreateView, DeleteView, UpdateView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-def mainpage(request):
-    topics = Topic.objects.all()
-    articles = Article.objects.all()
-    form = FindArticleForm(request.GET or None)
-    if form.is_valid():
-        inf = form.cleaned_data.get('name')
-        articles = Article.objects.filter(name__icontains = inf)
-        return render(request, 'mainpage.html', {'articles' : articles})
-    else:
-        return render(request, 'mainpage.html', {'topics' : topics, 'articles' : articles, 'form' : form})
+class AboutView(TemplateView):
+    template_name = "about.html"
 
 
-def about_page(request):
-    return render(request, 'about.html')
+class ArticleListView(ListView):
+    model = Article
+    template_name = 'mainpage.html'
+    form_class = FindArticleForm
+    http_method_names = ['get']
+    extra_context = {'topics' : Topic.objects.all(), 'articles' : Article.objects.all(), 'art_list' : FindArticleForm()}
+    success_url = '/'
+    queryset = Article.objects.all()
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if name := self.request.GET.get('name'):
+            queryset = queryset.filter(name__icontains=name)
+        return queryset
 
 
-def articlepage(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    comments = Comment.objects.filter(article=article)
-    if request.method == "POST":
+class ArticlePageView(LoginRequiredMixin, View):
+
+    def get(self, request, pk):
+        article = get_object_or_404(Article, pk=pk)
+        comments = Comment.objects.filter(article=article)
+        form = CommentForm()
+        return render(request, 'articlepage.html', {'article': article, 'comments': comments, 'form': form})
+
+    def post(self, request, pk):
+        article = get_object_or_404(Article, pk=pk)
+        comments = Comment.objects.filter(article=article)
         form = CommentForm(request.POST)
         if form.is_valid():
-            comment = form.save()
             comment = form.save(commit=False)
             comment.article = article
             comment.user = request.user if request.user.is_authenticated else None
             comment.save()
             return redirect('articlepage', pk=article.pk)
-    else:
-        form = CommentForm()
-        return render(request, 'articlepage.html', {'article': article, 'comments': comments, 'form' : form})
+        return render(request, 'articlepage.html', {'article': article, 'comments': comments, 'form': form})
     
 
-def article_comment(request, pk):
-    return HttpResponse(f"Hello, it`s comment to {pk} article page")
+class ArticleCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'articlecreate.html'
+    http_method_names = ['get', 'post']
+    form_class = ArticleForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.user = self.request.user
+        obj.save()
+        return super().form_valid(form=form)
 
 
-@login_required(login_url='/accounts/login/')
-def article_create(request):
-    if request.method == "POST":
-        form = ArticleForm(request.POST)
-        if form.is_valid():
-            article = form.save()
-            article.user = request.user if request.user.is_authenticated else None
-            article.save()
-            return redirect('articlepage', pk=article.pk)
-    else:
-        form = ArticleForm()
-    return render(request, 'articlecreate.html', {'form': form})
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
+    model = Article
+    template_name = 'articleupdate.html'
+    fields = ['text']
+
+    def form_valid(self, form):
+        comment = self.get_object()
+        if comment.user == self.request.user:
+            return super().form_valid(form)
+        else: return redirect('mainpage')
 
 
-def article_update(request, pk):
-    return HttpResponse(f"Hello, it`s page for updating {pk} article")
-
-
-def article_delete(request, pk):
-    return HttpResponse(f"Hello, it`s page for droping {pk} article")
+class ArticleDeleteView(LoginRequiredMixin, DeleteView):
+    model = Article
+    success_url = '/'
 

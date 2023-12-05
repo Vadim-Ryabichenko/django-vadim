@@ -4,10 +4,20 @@
 <div class = "reg">
     <h1>Create new User</h1>
     <p>Please, sign up using the following form:</p>
-    <form action="." method="post">
-        {{ user_form.as_p }}
+    <form method="post">
         {% csrf_token %}
-        <p><input type="submit" value="Create User"></p>
-    </form>
+      
+       <p><label>{{ form.username.label }}</label></p>
+        {{ form.username }}
+      
+        <p><label>{{ form.password1.label }}</label></p>
+        {{ form.password1 }}
+      
+        <p><label>{{ form.password2.label }}</label></p>
+        {{ form.password2 }}
+      <br>
+      <br>
+        <input type="submit" value="Submit">
+      </form>
 </div>
 {% endblock %}

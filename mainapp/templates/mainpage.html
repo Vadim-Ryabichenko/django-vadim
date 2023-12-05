@@ -9,19 +9,29 @@
     </div>
     {% endfor %}
 </div>
+<hr>
 <div class = "ppp">
-    {% for article in articles %}
+    {% for article in object_list %}
     <div class = "rrr">
-        <a href="{% url 'articlepage' pk=article.pk %}"><h1>{{ article.name }}</h1></a> 
+        <a href="{% url 'articlepage' pk=article.pk %}"><h1>{{ article.name }}</h1></a>
+        <form method="post" action="{% url 'article-delete' article.pk %}">
+            {% csrf_token %}
+            <input type="submit" value="Delete">
+        </form>
+        <br>
+        <form method="post" action="{% url 'article_update' article.pk %}">
+            {% csrf_token %}
+            <input type="submit" value="Update">
+        </form>  
     </div>  
     {% endfor %}
 </div>
+<hr>
 <div class = "ppp3">
-{% if form %}
+{% if art_list %}
 <form method="" action="{% url 'mainpage' %}">
     <h1>To find article in articles</h1>
-    {{ form.as_p }}
-    {% csrf_token %}
+    {{ art_list.as_p }}
 <button type="submit">Find article</button>
 </form>
 {% endif %}

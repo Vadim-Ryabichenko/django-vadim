@@ -1,16 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from .models import Topic
 from mainapp.models import Article
+from django.views.generic import ListView, View
 
 
-def topics_page(request):
-    return HttpResponse("Hello, it`s page for topics")
+class TopicListView(ListView):
+    model = Article
+    template_name = 'topiclist.html'
+    extra_context = {'topics' : Topic.objects.all()}
 
-def topic_subscribe(request, pk):
-    topics = Topic.objects.filter(pk=pk)
-    articles = Article.objects.filter(topics__id = pk)
-    return render(request, 'art_list.html', {'topics' : topics, 'articles' : articles})
 
-def topic_unsubscribe(request, topic_id):
-    return HttpResponse(f"Hello, it`s page for unsubscribe {topic_id} topics")
+class TopicSubscribeView(View):
+    def get(self, request, pk):
+        topics = Topic.objects.filter(pk=pk)
+        articles = Article.objects.filter(topics__id=pk)
+        return render(request, 'art_list.html', {'topics': topics, 'articles': articles})
+
+

@@ -1,5 +1,6 @@
 from django.db import models
 from topicsapp.models import Topic
+from django.urls import reverse
 
 
 class Article(models.Model):
@@ -13,6 +14,8 @@ class Article(models.Model):
     def __str__(self):
         return f"Article_name is ~{self.name}~"
 
+    def get_absolute_url(self):
+        return reverse("article_update", kwargs={'pk': self.pk})
 
 class Comment(models.Model):
     create_at = models.DateField(auto_now_add=True)
