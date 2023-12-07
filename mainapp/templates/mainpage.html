@@ -2,6 +2,26 @@
 
 
 {% block content %}
+<div class = page_message>
+{% if user.is_authenticated %}
+{% if message %}
+    <h1>{{user.username}} ~~~ {{message}}</h1>
+{% endif %}
+{% else %}
+{% if message %}
+    <h1>Anonim user ~~~ {{message}}</h1>
+{% endif %}
+{% endif %}
+{% if user.is_authenticated %}
+{% if message_10 %}
+    <h1>{{user.username}} ~~~ {{message_10}}</h1>
+{% endif %}
+{% else %}
+{% if message_10 %}
+    <h1>Anonim user ~~~ {{message_10}}</h1>
+{% endif %}
+{% endif %}
+</div>
 <div class = "ppp2">
     {% for topic in topics %}
     <div class = "rrr2">
@@ -28,12 +48,10 @@
 </div>
 <hr>
 <div class = "ppp3">
-{% if art_list %}
 <form method="" action="{% url 'mainpage' %}">
     <h1>To find article in articles</h1>
-    {{ art_list.as_p }}
+    {{ art_list_form.as_p }}
 <button type="submit">Find article</button>
 </form>
-{% endif %}
 </div>
 {% endblock %}
